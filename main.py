@@ -12,9 +12,21 @@ class Validator:
     __occupation: str
     __political_views: str
     __worldview: str
-    __occupation_invalid = []
-    __political_views_invalid = []
-    __worldview_invalid = []
+    __occupation_invalid = ['Монах',
+                            'Маг',
+                            'Паладин',
+                            'Кодер']
+    __political_views_invalid = ['поддерживает Имперский легион',
+                                 'патриот независимой Темерии', 'поддерживает Братьев Бури',
+                                 'согласен с действиями Гарроша Адского Крика на посту вождя Орды']
+    __worldview_invalid = ['Культ Вечного Огня',
+                           'Культ богини Мелитэле',
+                           'Культ пророка Лебеды',
+                           'Культ Механикус',
+                           'Храм Трибунала',
+                           'Девять божеств',
+                           'Культ проклятых',
+                           'Светское гачимученничество']
 
     def __init__(self, telephone: str, height: float, snils: str, passport_number: str, age: int, address: str,
                  occupation: str, political_views: str,
@@ -49,7 +61,7 @@ class Validator:
         :return: bool
         Булевый результат проверки
         """
-        if re.match(r"^\d{1,2}\.\d{1,2}$", self.__height) is not None and (float(self.__height) > 1.50) and \
+        if re.match(r"^\d{1,2}\.\d{1,2}$", str(self.__height)) is not None and (float(self.__height) > 1.50) and \
                 (float(self.__height) < 2.20):
             return True
         return False
@@ -86,7 +98,7 @@ class Validator:
         :return: bool
         Булевый результат проверки
         """
-        if re.match(r"^\d{2}$", self.__age) is not None and (int(self.__age) > 18) and (int(self.__age) < 70):
+        if re.match(r"^\d{2}$", str(self.__age)) is not None and (int(self.__age) > 18) and (int(self.__age) < 70):
             return True
         return False
 
@@ -111,7 +123,8 @@ class Validator:
         :return: bool
         Булевый результат проверки
         """
-        if self.__occupation not in self.__occupation_invalid and re.match(r"^[\D]+$", self.__occupation) is not None:
+        if self.__occupation not in self.__occupation_invalid and re.match(r"^([A-Z]|[А-Я])[\D]+$", self.__occupation) \
+                is not None:
             return True
         return False
 
