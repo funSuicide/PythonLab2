@@ -1,4 +1,5 @@
 import re
+import json
 
 
 class Validator:
@@ -139,3 +140,33 @@ class Validator:
                 re.match(r"^[\D]+$", self.__worldview) is not None:
             return True
         return False
+
+
+class ReadFile:
+    """
+    Объект ReadFile считывает и хранит данные из выбранного файла.
+    Attributes
+      ----------
+      __data - хранит данные, считанные из файла
+    """
+
+    __data: object
+
+    def __init__(self, path: str):
+        """
+        __init__ - инициализирует экземпляр класса ReadFromFile
+        Parameters
+        ----------
+        path : str
+        Путь до выбранного файла
+        """
+        self.__data = json.load(open(path, encoding='windows-1251'))
+
+    @property
+    def data(self) -> object:
+        """
+        data - метод получения данных файла
+        :return: object
+        Возвращает тип object
+        """
+        return self.__data
