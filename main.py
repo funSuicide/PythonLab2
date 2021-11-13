@@ -28,9 +28,9 @@ class Validator:
                            'Культ проклятых',
                            'Светское гачимученничество']
 
-    def __init__(self, telephone: str, height: float, snils: str, passport_number: str, age: int, address: str,
-                 occupation: str, political_views: str,
-                 worldview: str):
+    def __init__(self, telephone: str, height: float, snils: str, passport_number: str, occupation: str, age: int,
+                 political_views: str,
+                 worldview: str, address: str):
         self.__telephone = telephone
         self.__height = height
         self.__snils = snils
@@ -86,7 +86,7 @@ class Validator:
         :return: bool
         Булевый результат проверки
         """
-        if re.match(r"^\d{6}$", self.__snils) is not None:
+        if re.match(r"^\d{6}$", str(self.__passport_number)) is not None:
             return True
         return False
 
@@ -154,6 +154,34 @@ class Validator:
                 re.match(r"^[\D]+$", self.__worldview) is not None:
             return True
         return False
+
+    def check_all(self) -> int:
+        """
+        Выполнение всех проверок класса
+
+        :return: int
+        Целочисленный результат (номер невалидного значения)
+        """
+        if not self.check_telephone():
+            return 0
+        elif not self.check_height():
+            return 1
+        elif not self.check__snils():
+            return 2
+        elif not self.check_passport_number():
+            return 3
+        elif not self.check_age():
+            return 4
+        elif not self.check_occupation():
+            return 5
+        elif not self.check_address():
+            return 6
+        elif not self.check_political_views():
+            return 7
+        elif not self.check_worldview():
+            return 8
+        else:
+            return 9
 
 
 class ReadFile:
