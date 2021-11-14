@@ -1,5 +1,7 @@
 import re
 import json
+import argparse
+from tqdm import tqdm
 
 
 class Validator:
@@ -28,7 +30,7 @@ class Validator:
                            'Культ проклятых',
                            'Светское гачимученничество']
 
-    def __init__(self, telephone: str, height: float, snils: str, passport_number: str, occupation: str, age: int,
+    def __init__(self, telephone: str, height: float, snils: str, passport_number: str, age: int, occupation: str,
                  political_views: str,
                  worldview: str, address: str):
         self.__telephone = telephone
@@ -212,3 +214,45 @@ class ReadFile:
         Возвращает тип object
         """
         return self.__data
+
+
+parser = argparse.ArgumentParser(description='main')
+parser.add_argument('-input', dest="file_input", default='92.txt', type=str)
+parser.add_argument('-output', dest="file_output", default='92_output.txt', type=str)
+args = parser.parse_args()
+output = open(args.file_output, 'w')
+file = ReadFile(args.file_input)
+checkers = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+number_of_valid_records = 0
+with tqdm(file.data, desc='Прогресс валидации', colour="#FFFFFF") as progressbar:
+    for elem in file.data:
+        check_element = Validator(elem['telephone'], elem['height'], elem['snils'], elem['passport_number'],
+                                  elem['age'],
+                                  elem['occupation'], elem['political_views'], elem['worldview'], elem['address'])
+        valid_values = check_element.check_all()
+        if valid_values == 9:
+            output.write("telephone: " + elem["telephone"] + "\n" + "height:" + str(elem["height"]) + "\n" +
+                         "snils: " + elem["snils"] + "\n" + "passport_number:" + str(elem["passport_number"]) + "\n" +
+                         "age: " + str(elem["age"]) + "\n" + "occupation: " + elem["occupation"]
+                         + "\n" + "political_views: " + elem["political_views"] + "\n" + "worldview: " + elem[
+                             "worldview"] +
+                         "\n" + "address: " + elem["address"] + "\n" + "__________________________________________\n")
+            number_of_valid_records += 1
+        else:
+            checkers[valid_values] += 1
+        progressbar.update(1)
+number_of_invalid_records = checkers[0] + checkers[1] + checkers[2] + checkers[3] + checkers[4] + checkers[5] + \
+                            checkers[6] + checkers[
+                                7] + checkers[8]
+print("Общее число корректных записей:", number_of_valid_records, )
+print("Общее число некорректных записей:", number_of_invalid_records)
+print("Ошибки в telephone:", checkers[0])
+print("Ошибки в height:", checkers[1])
+print("Ошибки в snils:", checkers[2])
+print("Ошибки в passport_number:", checkers[3])
+print("Ошибки в age:", checkers[4])
+print("Ошибки в occupation:", checkers[5])
+print("Ошибки в political_views:", checkers[6])
+print("Ошибки в worldview:", checkers[7])
+print("Ошибки в address:", checkers[8])
+output.close()
