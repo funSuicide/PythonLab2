@@ -144,9 +144,7 @@ class Validator:
         :return: bool
         Булевый результат проверки
         """
-        if re.match(r"^ул\.\s[А-Я ][а-я ]+\s([0-9]-[а-я] )*[0-9]+$", self.__address) is not None or \
-                re.match(r"^Аллея\s[А-Я ][а-я ]+\s([0-9]-[а-я] )*[0-9]+$",
-                         self.__address) is None:
+        if re.match(r"^(ул\.)?(Аллея)?\s[\w\.\s-]+\d+$", self.__address) is not None:
             return True
         return False
 
