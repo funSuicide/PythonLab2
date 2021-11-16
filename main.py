@@ -5,6 +5,23 @@ from tqdm import tqdm
 
 
 class Validator:
+    """
+        Объект Validator репрезентует класс для валидации данных.
+        Attributes
+          ----------
+          __telephone - хранит номер телефона соответствующей записи
+          __height - хранит рост соответствующей записи
+          __snils - хранит СНИЛС соответствующей записи
+          __passport_number - хранит номер паспорта соответствующей записи
+          __age - хранит возраст соответствующей записи
+          __address - хранит адрес соответствующей записи
+          __occupation - хранит значение профессии соответствующей записи
+          __political_views - хранит значение политических взглядов соответствующей записи
+          __worldview - хранит значение мировоззрения соответствующей записи
+          __occupation_invalid - хранит невалидные значения профессии
+          __political_views_invalid - хранит невалидные значения политических взглядов
+          __worldview_invalid - хранит невалидные значения мировоззрения
+    """
     __telephone: str
     __height: float
     __snils: str
@@ -33,6 +50,21 @@ class Validator:
     def __init__(self, telephone: str, height: float, snils: str, passport_number: str, age: int, occupation: str,
                  political_views: str,
                  worldview: str, address: str):
+        """
+            __init__ - инициализирует экземпляр класса Validator
+            Parameters
+            ----------
+            telephone : str
+            height: float
+            snils: str
+            passport_number: str
+            age: int
+            occupation: str
+            political_views: str
+            worldview: str
+            address: str
+            Путь до выбранного файла
+        """
         self.__telephone = telephone
         self.__height = height
         self.__snils = snils
@@ -63,7 +95,7 @@ class Validator:
         :return: bool
         Булевый результат проверки
         """
-        if re.match(r"^\d{1,2}\.\d{1,2}$", str(self.__height)) is not None and (float(self.__height) > 1.50) and \
+        if re.match(r"^\d{1,2}\.\d{1,2}$", str(self.__height)) is not None and (float(self.__height) > 1.20) and \
                 (float(self.__height) < 2.20):
             return True
         return False
@@ -100,20 +132,21 @@ class Validator:
         :return: bool
         Булевый результат проверки
         """
-        if re.match(r"^\d{2}$", str(self.__age)) is not None and (int(self.__age) > 18) and (int(self.__age) < 70):
+        if re.match(r"^\d{2}$", str(self.__age)) is not None and (int(self.__age) > 0) and (int(self.__age) < 70):
             return True
         return False
 
     def check_address(self) -> bool:
         """
         Проверку корректности адреса.
-        Если строка начинается с ул. или с Алллея возвращает True, иначе False.
+        Если строка начинается с ул. или не начинается с Алллея возвращает True, иначе False.
 
         :return: bool
         Булевый результат проверки
         """
-        if re.match(r"(ул\.\s[\w .-]+\d+)", self.__address) is not None and re.match(r"^Аллея\s[\w .-]+\d+$",
-                                                                                     self.__address) is None:
+        if re.match(r"^ул\.\s[А-Я ][а-я ]+\s([0-9]-[а-я] )*[0-9]+$", self.__address) is not None or \
+                re.match(r"^Аллея\s[А-Я ][а-я ]+\s([0-9]-[а-я] )*[0-9]+$",
+                         self.__address) is None:
             return True
         return False
 
@@ -252,7 +285,7 @@ print("Ошибки в snils:", checkers[2])
 print("Ошибки в passport_number:", checkers[3])
 print("Ошибки в age:", checkers[4])
 print("Ошибки в occupation:", checkers[5])
-print("Ошибки в political_views:", checkers[6])
-print("Ошибки в worldview:", checkers[7])
-print("Ошибки в address:", checkers[8])
+print("Ошибки в address:", checkers[6])
+print("Ошибки в political_views:", checkers[7])
+print("Ошибки в worldview:", checkers[8])
 output.close()
